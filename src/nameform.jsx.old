@@ -1,0 +1,55 @@
+import React from 'react';
+
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { email: '', password: '' };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    // console.log(event.target);
+    const { name, value } = event.target;
+    console.log(name, value);
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(event) {
+    // alert('A email was submitted: ' + this.state.email);
+
+    event.preventDefault();
+    this.setState({ email: '', password: '' });
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange}
+            required
+          />
+        </label>
+        <label>
+          Password:
+          <input
+            type="password"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+            required
+          />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
+export default NameForm;
