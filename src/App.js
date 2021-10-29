@@ -7,20 +7,44 @@ import Homepage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUp from './components/sign-in/sign-in.component';
 import Header from './components/header/header.components';
+import { auth } from './firebase/firebase.utils';
 
-function App() {
-  return (
-    <Router>
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Homepage} />
-          <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUp} />
-        </Switch>
-      </div>
-    </Router>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      currentUser: null,
+    };
+  }
+
+  unsubscribeFromAuth = null;
+
+  componentDidMount() {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      this.setState({ currentUser: user });
+      console.log(user.displayName, user.email);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <Header currentUser={this.state.currentUser} />
+          <Switch>
+            <Route exact path="/" component={Homepage} />
+            <Route path="/shop" component={ShopPage} />
+            <Route path="/signin" component={SignInAndSignUp} />
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;
